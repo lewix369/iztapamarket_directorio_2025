@@ -149,3 +149,27 @@ export const getReviewsByBusinessId = async (businessId) => {
 
   return data;
 };
+
+export const fetchBusinessesFromDb = async (planType) => {
+  try {
+    let query = supabase.from("negocios").select("*");
+
+    if (planType && typeof planType === "string") {
+      query = query.eq("plan_type", planType.toLowerCase());
+    }
+
+    query = query.eq("is_approved", true);
+
+    const { data, error } = await query;
+
+    if (error) {
+      console.error("Error al obtener negocios:", error);
+      return [];
+    }
+
+    return data || [];
+  } catch (err) {
+    console.error("Error inesperado en fetchBusinessesFromDb:", err);
+    return [];
+  }
+};

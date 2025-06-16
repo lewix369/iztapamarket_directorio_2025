@@ -4,6 +4,7 @@ import { motion } from "framer-motion";
 import { Search, Star, MapPin, Clock, Grid, List, FilterX } from "lucide-react";
 import Header from "@/components/Header";
 import Footer from "@/components/Footer";
+import BusinessCard from "@/components/BusinessCard";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import {
@@ -321,146 +322,13 @@ const BusinessListPage = () => {
                   animate={{ opacity: 1, y: 0 }}
                   transition={{ delay: index * 0.05 }}
                 >
-                  {viewMode === "grid" ? (
-                    <Card className="group hover:shadow-2xl transition-all duration-300 border-0 shadow-lg overflow-hidden">
-                      <div className="relative">
-                        <img
-                          alt={`${business.nombre} - ${business.descripcion}`}
-                          className="w-full h-48 object-cover group-hover:scale-105 transition-transform duration-300"
-                          src={
-                            business.imagen_url ||
-                            "https://images.unsplash.com/photo-1613243555978-636c48dc653c"
-                          }
-                        />
-                        <div className="absolute top-4 left-4">
-                          <Badge
-                            variant={
-                              business.plan_type === "premium"
-                                ? "orange"
-                                : business.plan_type === "pro"
-                                ? "blue"
-                                : "secondary"
-                            }
-                            className="shadow-lg"
-                          >
-                            {business.plan_type}
-                          </Badge>
-                        </div>
-                        <div className="absolute top-4 right-4 bg-white/90 backdrop-blur-sm rounded-full px-3 py-1 flex items-center space-x-1">
-                          <Star className="h-4 w-4 text-yellow-500 fill-current" />
-                          <span className="text-sm font-semibold">
-                            {business.rating || 0}
-                          </span>
-                        </div>
-                      </div>
-                      <CardHeader>
-                        <CardTitle className="text-xl group-hover:text-blue-600 transition-colors">
-                          {business.nombre}
-                        </CardTitle>
-                        <CardDescription className="text-orange-600 font-medium">
-                          {business.categoria}
-                        </CardDescription>
-                      </CardHeader>
-                      <CardContent>
-                        <p className="text-gray-600 mb-4 text-sm truncate">
-                          {business.descripcion}
-                        </p>
-                        <div className="space-y-2 mb-4">
-                          <div className="flex items-center space-x-2 text-sm text-gray-500">
-                            <MapPin className="h-4 w-4" />
-                            <span>{business.direccion || "N/A"}</span>
-                          </div>
-                          <div className="flex items-center space-x-2 text-sm text-gray-500">
-                            <Clock className="h-4 w-4" />
-                            <span>{business.hours || "N/A"}</span>
-                          </div>
-                        </div>
-                        <div className="flex items-center justify-between">
-                          <div className="text-sm text-gray-500">
-                            {business.reviews_count || 0} reseñas
-                          </div>
-                          <Link to={`/negocio/${business.slug}`}>
-                            <Button
-                              variant="outline"
-                              size="sm"
-                              className="group-hover:bg-blue-600 group-hover:text-white transition-colors"
-                            >
-                              Ver Detalles
-                            </Button>
-                          </Link>
-                        </div>
-                      </CardContent>
-                    </Card>
-                  ) : (
-                    <Card className="group hover:shadow-lg transition-all duration-300">
-                      <div className="flex flex-col md:flex-row">
-                        <div className="relative md:w-64 h-48 md:h-auto">
-                          <img
-                            alt={`${business.nombre} - ${business.descripcion}`}
-                            className="w-full h-full object-cover"
-                            src={
-                              business.imagen_url ||
-                              "https://images.unsplash.com/photo-1613243555978-636c48dc653c"
-                            }
-                          />
-                          <div className="absolute top-4 left-4">
-                            <Badge
-                              variant={
-                                business.plan_type === "premium"
-                                  ? "orange"
-                                  : business.plan_type === "pro"
-                                  ? "blue"
-                                  : "secondary"
-                              }
-                            >
-                              {business.plan_type}
-                            </Badge>
-                          </div>
-                        </div>
-                        <div className="flex-1 p-6">
-                          <div className="flex justify-between items-start mb-4">
-                            <div>
-                              <h3 className="text-2xl font-bold group-hover:text-blue-600 transition-colors">
-                                {business.nombre}
-                              </h3>
-                              <p className="text-orange-600 font-medium">
-                                {business.categoria}
-                              </p>
-                            </div>
-                            <div className="flex items-center space-x-1 bg-yellow-50 px-3 py-1 rounded-full">
-                              <Star className="h-4 w-4 text-yellow-500 fill-current" />
-                              <span className="font-semibold">
-                                {business.rating || 0}
-                              </span>
-                              <span className="text-sm text-gray-500">
-                                ({business.reviews_count || 0})
-                              </span>
-                            </div>
-                          </div>
-                          <p className="text-gray-600 mb-4 text-sm">
-                            {business.descripcion}
-                          </p>
-                          <div className="grid grid-cols-1 md:grid-cols-2 gap-4 mb-4">
-                            <div className="flex items-center space-x-2 text-sm text-gray-500">
-                              <MapPin className="h-4 w-4" />
-                              <span>{business.direccion || "N/A"}</span>
-                            </div>
-                            <div className="flex items-center space-x-2 text-sm text-gray-500">
-                              <Clock className="h-4 w-4" />
-                              <span>{business.hours || "N/A"}</span>
-                            </div>
-                          </div>
-                          <div className="flex justify-end">
-                            <Link to={`/negocio/${business.slug}`}>
-                              <Button className="bg-blue-600 hover:bg-blue-700">
-                                Ver Detalles
-                              </Button>
-                            </Link>
-                          </div>
-                        </div>
-                      </div>
-                    </Card>
-                  )}
+                  <BusinessCard
+                    business={{
+                      ...business,
+                      horario: business.horario ?? business.hours, // Asegura que 'horario' esté presente
+                    }}
+                    viewMode={viewMode}
+                  />
                 </motion.div>
               ))}
             </div>
